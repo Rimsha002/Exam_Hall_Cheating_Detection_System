@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Exam Monitoring System - Design System
+   Navy/Purple professional dashboard theme
+   All colors in HSL format
+*/
+
+
+
+@layer base {
+  :root {
+    /* Core Background & Foreground */
+    --background: 220 20% 97%;
+    --foreground: 222 47% 11%;
+
+    /* Sidebar - Dark Navy */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 220 20% 90%;
+    --sidebar-primary: 252 85% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 47% 18%;
+    --sidebar-accent-foreground: 220 20% 90%;
+    --sidebar-border: 222 47% 18%;
+    --sidebar-ring: 252 85% 60%;
+    --sidebar-muted: 222 30% 25%;
+
+    /* Cards */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Purple/Indigo accent */
+    --primary: 252 85% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 252 85% 70%;
+
+    /* Secondary */
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted */
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 10% 46%;
+
+    /* Accent */
+    --accent: 252 85% 96%;
+    --accent-foreground: 252 85% 40%;
+
+    /* Destructive / Error */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Success */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 76% 95%;
+
+    /* Warning */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --warning-light: 38 92% 95%;
+
+    /* Info */
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+    --info-light: 199 89% 95%;
+
+    /* Alert severity colors */
+    --alert-high: 0 84% 60%;
+    --alert-medium: 38 92% 50%;
+    --alert-low: 199 89% 48%;
+
+    /* Border & Input */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 252 85% 60%;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: 252 85% 60%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 0 84% 60%;
+
+    /* Gradients */
+    --gradient-login: linear-gradient(135deg, hsl(252 85% 60%) 0%, hsl(222 47% 40%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(252 85% 60%) 0%, hsl(252 85% 70%) 100%);
+    --gradient-sidebar: linear-gradient(180deg, hsl(222 47% 14%) 0%, hsl(222 47% 11%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(222 47% 11% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(222 47% 11% / 0.1), 0 2px 4px -2px hsl(222 47% 11% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(222 47% 11% / 0.1), 0 4px 6px -4px hsl(222 47% 11% / 0.1);
+    --shadow-card: 0 1px 3px 0 hsl(222 47% 11% / 0.1), 0 1px 2px -1px hsl(222 47% 11% / 0.1);
+    --shadow-glow: 0 0 20px hsl(252 85% 60% / 0.3);
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 220 20% 95%;
+
+    --card: 222 47% 9%;
+    --card-foreground: 220 20% 95%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 220 20% 95%;
+
+    --primary: 252 85% 65%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 222 47% 15%;
+    --secondary-foreground: 220 20% 95%;
+
+    --muted: 222 47% 15%;
+    --muted-foreground: 220 10% 60%;
+
+    --accent: 222 47% 18%;
+    --accent-foreground: 252 85% 70%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 47% 18%;
+    --input: 222 47% 18%;
+    --ring: 252 85% 65%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 220 20% 90%;
+    --sidebar-accent: 222 47% 14%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+
+  /* Login gradient background */
+  .login-gradient {
+    background: var(--gradient-login);
+  }
+
+  /* Sidebar styling */
+  .sidebar-gradient {
+    background: var(--gradient-sidebar);
+  }
+
+  /* Card with shadow */
+  .card-elevated {
+    @apply bg-card rounded-lg;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply bg-card rounded-lg p-6;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Alert badges */
+  .badge-high {
+    @apply bg-destructive text-destructive-foreground;
+  }
+
+  .badge-medium {
+    @apply bg-warning text-warning-foreground;
+  }
+
+  .badge-low {
+    @apply bg-info text-info-foreground;
+  }
+
+  /* Status badges */
+  .status-active {
+    @apply bg-success-light text-success;
+  }
+
+  .status-inactive {
+    @apply bg-muted text-muted-foreground;
+  }
+
+  .status-live {
+    @apply bg-success text-success-foreground;
+  }
+
+  .status-upcoming {
+    @apply bg-info-light text-info;
+  }
+
+  .status-completed {
+    @apply bg-muted text-muted-foreground;
+  }
+
+  /* Glow effect for primary buttons */
+  .btn-glow {
+    box-shadow: var(--shadow-glow);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .btn-glow:hover {
+    box-shadow: 0 0 30px hsl(252 85% 60% / 0.5);
+  }
+}
+
+@layer utilities {
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s infinite;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.7;
+    }
+  }
+}
