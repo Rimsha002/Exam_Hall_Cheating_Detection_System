@@ -6,19 +6,47 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
+
 type UserRole = "admin" | "invigilator";
 
 export default function Login() {
   const navigate = useNavigate();
   const [role, setRole] = useState<UserRole>("admin");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Navigate to dashboard on login
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch("http://127.0.0.1:8000/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, role }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      // response.ok false hone par yahi alert dikhana
+      alert(data.detail || "Login failed");
+      return;
+    }
+
+    console.log("Login Success:", data);
     navigate("/dashboard");
-  };
+  } catch (err: unknown) {
+    // TypeScript safe handling
+    if (err instanceof Error) {
+      alert(err.message);
+    } else {
+      alert("Backend not reachable");
+    }
+  }
+};
+
+
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center p-4">
@@ -47,7 +75,7 @@ export default function Login() {
                 "flex flex-1 items-center justify-center gap-2 rounded-md py-2.5 text-sm font-medium transition-all",
                 role === "admin"
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               <Shield className="h-4 w-4" />
@@ -60,7 +88,7 @@ export default function Login() {
                 "flex flex-1 items-center justify-center gap-2 rounded-md py-2.5 text-sm font-medium transition-all",
                 role === "invigilator"
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               <User className="h-4 w-4" />
@@ -71,15 +99,15 @@ export default function Login() {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium">
-                Username
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email
               </Label>
               <Input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email} // optional: rename variable later
+                onChange={(e) => setEmail(e.target.value)} // ya 'setEmail' agar variable rename karogi
                 className="h-11"
               />
             </div>
