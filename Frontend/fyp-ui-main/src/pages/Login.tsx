@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GraduationCap, User, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,21 +11,41 @@ type UserRole = "admin" | "invigilator";
 export default function Login() {
   const navigate = useNavigate();
   const [role, setRole] = useState<UserRole>("admin");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Navigate to dashboard on login
-    navigate("/dashboard");
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.detail || "Login failed");
+        return;
+      }
+
+      console.log("Login Success:", data);
+      navigate("/dashboard");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("Backend not reachable");
+      }
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center p-4">
       <div className="w-full max-w-md animate-fade-in">
-        {/* Login Card */}
         <div className="rounded-2xl bg-card p-8 shadow-lg">
-          {/* Logo */}
           <div className="mb-6 flex flex-col items-center">
             <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary shadow-glow">
               <GraduationCap className="h-8 w-8 text-primary-foreground" />
@@ -38,7 +58,6 @@ export default function Login() {
             </p>
           </div>
 
-          {/* Role Toggle */}
           <div className="mb-6 flex rounded-lg border border-border p-1">
             <button
               type="button"
@@ -68,18 +87,17 @@ export default function Login() {
             </button>
           </div>
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium">
-                Username
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email
               </Label>
               <Input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="h-11"
               />
             </div>
