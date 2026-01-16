@@ -18,28 +18,48 @@ export default function Signup() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Simple validation (can be extended later)
         if (password !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
 
-        // TODO: Send data to backend API
-        console.log({
-            username,
-            email,
-            phone,
-            password,
-            role,
-        });
+        const payload = {
+            name: username,      // backend expects "name"
+            email: email,
+            phone: phone,
+            password: password,
+            role: role
+        };
 
-        // Navigate to login after signup
-        navigate("/login");
+        try {
+            const response = await fetch("http://127.0.0.1:8000/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                alert(err.detail || "Signup failed");
+                return;
+            }
+
+            const data = await response.json();
+            console.log("Signup success:", data);
+
+            alert("Signup successful!");
+            navigate("/login");
+
+        } catch (error) {
+            console.error("Signup error:", error);
+            alert("Backend not reachable");
+        }
     };
-
     return (
         <div className="min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center p-4">
             <div className="w-full max-w-md animate-fade-in">
