@@ -4,9 +4,85 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Calendar, Clock, MapPin, Users, FileText, AlertCircle, UserPlus, Settings } from "lucide-react";
 
+
+
 export default function ExamSetup() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+  exam_name: "",
+  exam_code: "",
+  description: "",
+  exam_date: "",
+  start_time: "",
+  end_time: "",
+  duration: "",
+  room: "",
+  max_students: ""
+});
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  setForm({
+    ...form,
+    [e.target.id]: e.target.value
+  });
+};
+
+const handleSubmit = async () => {
+  try {
+    const response = await fetch("http://127.0.0.1:8000/admin/exams", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        exam_name: form.exam_name,
+        exam_code: form.exam_code,
+        description: form.description,
+        exam_date: form.exam_date,
+        start_time: form.start_time,
+        end_time: form.end_time,
+        duration: Number(form.duration),
+        room: form.room,
+        max_students: Number(form.max_students)
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.detail || "Failed to create exam");
+      return;
+    }
+
+    alert(" Exam created successfully!");
+  } catch (err) {
+    alert(" Server error");
+  }
+};
+
+const handleReset = () => {
+  setForm({
+    exam_name: "",
+    exam_code: "",
+    description: "",
+    exam_date: "",
+    start_time: "",
+    end_time: "",
+    duration: "",
+    room: "",
+    max_students: ""
+  });
+};
+
+const handleCancel = () => {
+  navigate("/dashboard"); // Assuming dashboard is the main page
+};
+
+
+
   return (
     <DashboardLayout title="Exam Setup">
       <div className="max-w-4xl mx-auto">
@@ -34,11 +110,25 @@ export default function ExamSetup() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="examName">Exam Name</Label>
-                  <Input id="examName" placeholder="e.g., Mathematics Final Exam" />
+                  <Input
+                   id="exam_name"
+                   placeholder="e.g., Mathematics Final Exam"
+                    value={form.exam_name}
+                    onChange={handleChange}
+                    />
+
+                  
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="examCode">Exam Code</Label>
-                  <Input id="examCode" placeholder="e.g., MATH-301-F24" />
+                  <Input
+  id="exam_code"
+  placeholder="e.g., MT101"
+  value={form.exam_code}
+  onChange={handleChange}
+/>
+
+                  
                 </div>
               </div>
               <div className="space-y-2">
@@ -47,7 +137,10 @@ export default function ExamSetup() {
                   id="description"
                   placeholder="Enter exam description and instructions..."
                   rows={4}
+                  value={form.description}
+                   onChange={handleChange}
                 />
+                
               </div>
             </div>
 
@@ -60,21 +153,21 @@ export default function ExamSetup() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="examDate">Exam Date</Label>
-                  <Input id="examDate" type="date" />
+                  <Input id="exam_date" type="date" value={form.exam_date} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="duration">Duration (minutes)</Label>
-                  <Input id="duration" type="number" placeholder="e.g., 120" />
+                  <Input id="duration" type="number" placeholder="e.g., 120" value={form.duration} onChange={handleChange} />
                 </div>
               </div>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="startTime">Start Time</Label>
-                  <Input id="startTime" type="time" />
+                  <Input id="start_time" type="time" value={form.start_time} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="endTime">End Time</Label>
-                  <Input id="endTime" type="time" />
+                  <Input id="end_time" type="time" value={form.end_time} onChange={handleChange} />
                 </div>
               </div>
             </div>
@@ -88,11 +181,11 @@ export default function ExamSetup() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="room">Room/Location</Label>
-                  <Input id="room" placeholder="e.g., Room A, Building 3" />
+                  <Input id="room" placeholder="e.g., Room A, Building 3" value={form.room} onChange={handleChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="maxStudents">Maximum Students</Label>
-                  <Input id="maxStudents" type="number" placeholder="e.g., 50" />
+                  <Input id="max_students" type="number" placeholder="e.g., 50" value={form.max_students} onChange={handleChange} />
                 </div>
               </div>
             </div>
@@ -113,14 +206,14 @@ export default function ExamSetup() {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3">
-              <Button className="btn-glow">
+              <Button className="btn-glow" onClick={handleSubmit}>
                 <FileText className="mr-2 h-4 w-4" />
                 Create Exam
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" onClick={handleReset}>
                 Reset Form
               </Button>
-              <Button variant="outline" className="text-destructive hover:text-destructive">
+              <Button variant="outline" className="text-destructive hover:text-destructive" onClick={handleCancel}>
                 Cancel
               </Button>
             </div>
