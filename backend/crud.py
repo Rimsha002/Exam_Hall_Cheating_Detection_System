@@ -21,7 +21,7 @@ def create_user(db: Session, name: str, email: str, phone: str, password: str, r
     user = User(
         name=name,
         email=email,
-        phone=phone,     # ✅ NEW
+        phone=phone,     
         password=hashed_pw,
         role=role
     )
